@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v+i@jz0aczny7uqx^^1y*v8^#$*_n966aw(0*&fvh0v5^(r37j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost','https://shabir.pythonanywhere.com/']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'pages'
 ]
 
 MIDDLEWARE = [

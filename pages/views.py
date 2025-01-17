@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .models import *
 import json, requests
@@ -7,8 +7,7 @@ with open('portfolio.config.json', 'r') as fp:
 	config = json.load(fp)
 def index(request):
 	projects = Projects.objects.all()
-	jobs = Jobs.objects.all()
-	ctx = {'config': config['Config'],'projects': projects if projects else None,"jobs": jobs if jobs else None}
+	ctx = {'config': config['Config'],'projects': projects if projects else None}
 	if request.method == "POST":
 		email = request.POST.get('email')
 		name = request.POST.get('name')
@@ -21,3 +20,52 @@ def index(request):
 
 def blog(request):
 	return HttpResponse("Coming soon.")
+
+
+
+def project(request):
+    projects = Projects.objects.all()
+    context = {
+        'projects': projects,
+        'config': {
+            'name': 'Shabir',
+            'country': 'India',
+        }
+    }
+    return render(request, 'pages/project.html', context)
+
+# views.py
+
+
+from django.shortcuts import render, redirect
+from .models import Contact
+
+def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        company = request.POST.get('company')
+        designation = request.POST.get('designation')
+        message = request.POST.get('message')
+
+        # Save the form data into the Contact model
+        contact = Contact(name=name, email=email, company=company, designation=designation, message=message)
+        contact.save()
+
+        # Redirect to a thank you page after the form is successfully submitted
+        return redirect('thank_you')
+
+    return render(request, 'pages/contact.html')
+
+
+
+def thank_you(request):
+      return render(request, 'pages/thank_you.html')
+
+from django.http import FileResponse
+from django.conf import settings
+import os
+
+def download_resume(request):
+    file_path = os.path.join(settings.MEDIA_ROOT, 'files/shabeer.pdf')
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename='shabeer.pdf')
